@@ -807,7 +807,7 @@
         <p class="hint">代表例5件。氏名や番号は表示しません。</p>
         ${examples.map((item) => `
         <article class="response">
-          <small>${escapeHtml(item.createdAtText)} / 文章${escapeHtml(item.choice)}</small>
+          <small>${escapeHtml(formatDateTime(item.createdAtText))} / 文章${escapeHtml(item.choice)}</small>
           <p>${escapeHtml(item.reason || "理由未入力")}</p>
           <div>${item.tags.map((tag) => `<span class="pill">${escapeHtml(tag)}</span>`).join("")}</div>
         </article>
@@ -851,7 +851,7 @@
       }
       root.innerHTML = state.groups.map((item) => `
         <article class="response">
-          <small>${escapeHtml(item.createdAtText)} / ${escapeHtml(item.groupName)} / 文章${escapeHtml(item.choice)}</small>
+          <small>${escapeHtml(formatDateTime(item.createdAtText))} / ${escapeHtml(item.groupName)} / 文章${escapeHtml(item.choice)}</small>
           <p><b>納得しやすい理由：</b>${escapeHtml(item.reason || "未入力")}</p>
           <p><b>単純化：</b>${escapeHtml(item.simplify || "未入力")}</p>
           <p><b>本文との関連：</b>${escapeHtml(item.concept || "未入力")}</p>
@@ -865,9 +865,9 @@
         root.innerHTML = `<p class="empty">まだ保存された振り返りはありません。</p>`;
         return;
       }
-      root.innerHTML = state.reflections.map((item) => `
+      root.innerHTML = state.reflections.map((item, index) => `
         <article class="response">
-          <small>${escapeHtml(item.createdAtText)} / ${escapeHtml(formatStudent(item))}</small>
+          <small>${escapeHtml(formatDateTime(item.createdAtText))} / 回答${index + 1}</small>
           <p>${escapeHtml(item.text || "未入力")}</p>
         </article>
       `).join("");
@@ -878,7 +878,9 @@
       const text = state.reflections.map((item) => item.text).join(" ");
       const keywords = countKeywords(text);
       if (!keywords.length) {
-        root.innerHTML = `<p class="empty">まだ保存された振り返りはありません。</p>`;
+        root.innerHTML = state.reflections.length
+          ? `<p class="empty">集計対象のキーワードはまだありません。</p>`
+          : `<p class="empty">まだ保存された振り返りはありません。</p>`;
         return;
       }
       const max = Math.max(...keywords.map((item) => item.count));
@@ -889,21 +891,19 @@
     }
 
     function countKeywords(text) {
-      const stopWords = new Set([
-        "こと", "もの", "よう", "ため", "それ", "これ", "どれ", "ところ", "自分",
-        "思う", "思っ", "感じ", "今日", "情報", "文章", "説明", "語り", "生成", "AI",
-        "です", "ます", "した", "する", "いる", "ある", "ない", "なる", "れる", "られる",
-        "そして", "しかし", "だから", "また", "もっと", "そのまま"
-      ]);
-      const words = text
-        .replace(/[。、，．！？「」『』（）()【】\[\]・,.;:!?]/g, " ")
-        .split(/\s+/)
-        .flatMap((chunk) => chunk.match(/[一-龥ぁ-んァ-ヶーA-Za-z0-9]{2,}/g) || [])
-        .map((word) => word.trim())
-        .filter((word) => word.length >= 2 && !stopWords.has(word));
+      const keywords = [
+        "根拠", "不安", "距離", "正しい", "わかりやすい", "納得", "疑う", "確認",
+        "判断", "SNS", "AI", "物語", "ナラティブ", "正義", "刺激", "信じる",
+        "感情", "単純化", "断定", "冷静", "比較", "多面的", "批判的", "根拠が弱い",
+        "不安をあおる", "敵と味方", "情報", "表現", "構成", "前提", "省エネ"
+      ];
       const counts = new Map();
-      for (const word of words) {
-        counts.set(word, (counts.get(word) || 0) + 1);
+      for (const keyword of keywords) {
+        const escaped = keyword.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+        const matches = text.match(new RegExp(escaped, "g"));
+        if (matches) {
+          counts.set(keyword, matches.length);
+        }
       }
       return [...counts.entries()]
         .map(([word, count]) => ({ word, count }))
@@ -918,6 +918,20 @@
       const number = item.number ? `${item.number}番` : "";
       const name = item.name || "";
       return [number, name].filter(Boolean).join(" / ") || "匿名";
+    }
+
+    function formatDateTime(value) {
+      if (!value) return "";
+      const date = new Date(value);
+      if (!Number.isNaN(date.getTime()) && String(value).includes("T")) {
+        return date.toLocaleString("ja-JP", {
+          month: "2-digit",
+          day: "2-digit",
+          hour: "2-digit",
+          minute: "2-digit"
+        });
+      }
+      return value;
     }
 
     function clearIndividualForm() {
