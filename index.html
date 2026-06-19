@@ -373,6 +373,54 @@
       font-style: italic;
     }
 
+    .portfolio {
+      display: none;
+      margin-top: 18px;
+    }
+
+    .portfolio.visible {
+      display: block;
+    }
+
+    .portfolio-section {
+      margin-top: 16px;
+      padding-top: 14px;
+      border-top: 1px solid var(--line);
+    }
+
+    .portfolio-section h4 {
+      margin: 0 0 8px;
+      font-size: 16px;
+    }
+
+    @media print {
+      header,
+      main > section:not(#reflection),
+      #reflection > .sub,
+      #reflection > h2,
+      #reflection > .quote,
+      #reflection > .board:not(#portfolioBoard) {
+        display: none !important;
+      }
+
+      body {
+        background: #fff;
+      }
+
+      main {
+        padding: 0;
+      }
+
+      #reflection,
+      #portfolioBoard {
+        display: block !important;
+        min-height: auto;
+        padding: 0;
+        border: 0;
+        box-shadow: none;
+      }
+    }
+
     @media (max-width: 900px) {
       .topbar,
       .grid,
@@ -643,6 +691,17 @@
         <textarea id="reflectionText" placeholder="わかりやすい語りに引き込まれそうになる自分を自覚し、情報とどのように距離を取るかを書く。"></textarea>
         <div class="actions">
           <button class="primary" id="saveReflection">振り返りを保存</button>
+          <button id="showPortfolio">ポートフォリオを表示</button>
+        </div>
+      </div>
+
+      <div class="board portfolio" id="portfolioBoard">
+        <h3>学習ポートフォリオ</h3>
+        <div id="portfolioContent">
+          <p class="empty">まだこの端末で保存された学習記録がありません。</p>
+        </div>
+        <div class="actions">
+          <button onclick="window.print()">印刷・PDF保存</button>
         </div>
       </div>
 
@@ -665,6 +724,7 @@
   <script>
     const GAS_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbyLFj5GMqWeiYDP4aYABbbvJP1nFqlszlSxCVmL8ytco6bPABATBSjyApA4Eo8o6YGSHg/exec";
     const LESSON_ID = "2026-06-20-1H-live";
+    const PORTFOLIO_KEY = `narrativePortfolio.${LESSON_ID}`;
     const state = { individuals: [], groups: [], reflections: [] };
 
     const samples = ["A", "B", "C"];
@@ -693,6 +753,7 @@
         createdAtText: new Date().toLocaleString("ja-JP")
       };
       await saveEntry(entry, () => {
+        rememberOwnEntry(entry);
         clearIndividualForm();
         location.hash = "#group";
       });
@@ -709,6 +770,7 @@
         createdAtText: new Date().toLocaleString("ja-JP")
       };
       await saveEntry(entry, () => {
+        rememberOwnEntry(entry);
         clearGroupForm();
         location.hash = "#share";
       });
@@ -723,10 +785,17 @@
         createdAtText: new Date().toLocaleString("ja-JP")
       };
       await saveEntry(entry, () => {
+        rememberOwnEntry(entry);
         document.querySelector("#finalNumber").value = "";
         document.querySelector("#finalName").value = "";
         document.querySelector("#reflectionText").value = "";
       });
+    });
+
+    document.querySelector("#showPortfolio").addEventListener("click", () => {
+      renderPortfolio();
+      document.querySelector("#portfolioBoard").classList.add("visible");
+      location.hash = "#portfolioBoard";
     });
 
     async function saveEntry(entry, afterSave) {
@@ -892,6 +961,53 @@
       `).join("");
     }
 
+    function renderPortfolio() {
+      const root = document.querySelector("#portfolioContent");
+      const own = loadOwnPortfolio();
+      const individual = [...own.individuals].reverse()[0];
+      const group = [...own.groups].reverse()[0];
+      const reflection = [...own.reflections].reverse()[0];
+      if (!individual && !group && !reflection) {
+        root.innerHTML = `<p class="empty">まだこの端末で保存された学習記録がありません。</p>`;
+        return;
+      }
+      const counts = { A: 0, B: 0, C: 0 };
+      for (const item of state.individuals) counts[item.choice] += 1;
+      const classKeywords = countKeywords(state.reflections.map((item) => item.text).join(" "))
+        .slice(0, 10)
+        .map((item) => item.word)
+        .join("、") || "まだありません";
+      root.innerHTML = `
+        <div class="portfolio-section">
+          <h4>自分の個人分析</h4>
+          ${individual ? `
+            <p><b>選んだ文章：</b>文章${escapeHtml(individual.choice)}</p>
+            <p><b>選んだ特徴：</b>${escapeHtml((individual.tags || []).join("、") || "未選択")}</p>
+            <p><b>理由：</b>${escapeHtml(individual.reason || "未入力")}</p>
+          ` : `<p class="empty">個人分析はまだ保存されていません。</p>`}
+        </div>
+        <div class="portfolio-section">
+          <h4>班でまとめたこと</h4>
+          ${group ? `
+            <p><b>班：</b>${escapeHtml(group.groupName || "")}</p>
+            <p><b>班で選んだ文章：</b>文章${escapeHtml(group.choice || "")}</p>
+            <p><b>納得しやすい理由：</b>${escapeHtml(group.reason || "未入力")}</p>
+            <p><b>単純化：</b>${escapeHtml(group.simplify || "未入力")}</p>
+            <p><b>本文との関連：</b>${escapeHtml(group.concept || "未入力")}</p>
+          ` : `<p class="empty">班のまとめはまだ保存されていません。</p>`}
+        </div>
+        <div class="portfolio-section">
+          <h4>自分の振り返り</h4>
+          ${reflection ? `<p>${escapeHtml(reflection.text || "未入力")}</p>` : `<p class="empty">振り返りはまだ保存されていません。</p>`}
+        </div>
+        <div class="portfolio-section">
+          <h4>クラス全体の傾向</h4>
+          <p><b>文章A：</b>${counts.A}人　<b>文章B：</b>${counts.B}人　<b>文章C：</b>${counts.C}人</p>
+          <p><b>振り返りキーワード：</b>${escapeHtml(classKeywords)}</p>
+        </div>
+      `;
+    }
+
     function renderKeywordCloud() {
       const root = document.querySelector("#keywordCloud");
       const text = state.reflections.map((item) => item.text).join(" ");
@@ -951,6 +1067,22 @@
         });
       }
       return value;
+    }
+
+    function loadOwnPortfolio() {
+      try {
+        return JSON.parse(localStorage.getItem(PORTFOLIO_KEY)) || { individuals: [], groups: [], reflections: [] };
+      } catch {
+        return { individuals: [], groups: [], reflections: [] };
+      }
+    }
+
+    function rememberOwnEntry(entry) {
+      const own = loadOwnPortfolio();
+      if (entry.type === "individual") own.individuals.push(entry);
+      if (entry.type === "group") own.groups.push(entry);
+      if (entry.type === "reflection") own.reflections.push(entry);
+      localStorage.setItem(PORTFOLIO_KEY, JSON.stringify(own));
     }
 
     function clearIndividualForm() {
