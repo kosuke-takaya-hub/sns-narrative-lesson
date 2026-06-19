@@ -458,6 +458,7 @@
       <nav aria-label="授業の進行">
         <a href="#intro">導入</a>
         <a href="#compare">個人比較</a>
+        <a href="#individual-share">個人共有</a>
         <a href="#group">班まとめ</a>
         <a href="#share">全体共有</a>
         <a href="#concept">本文接続</a>
@@ -498,22 +499,19 @@
     <section id="compare">
       <p class="sub">展開1 10分</p>
       <h2>個人で文章を比較する</h2>
-      <p class="lead">次の3つは、同じ架空の出来事について異なる語り口で書いた文章です。最も納得しそうになったものを選び、その理由を具体的な表現に注目して書きます。</p>
+      <p class="lead">「生成AIは活用すべきか」というテーマについて、異なる語り口でAIに文章を書かせました。最も納得しそうになったものを選び、その理由を具体的な表現に注目して書きます。</p>
       <div class="grid">
         <article class="card sample">
-          <h3>文章A：不安を強める語り</h3>
           <p><b>「AIを何も考えずに使っている人、正直かなり危ないです。」</b> 生成AIを使えば、一瞬で答えが出ます。でも、それって本当に「考えた」ことになるのでしょうか。調べる、迷う、言葉を選ぶ。そういう大事な時間が、気づかないうちに全部ショートカットされています。</p>
           <p>便利だからといって何でも任せていたら、自分で判断する力は確実に弱くなります。今止めないと、「AIが言ってるから正しい」で終わる人が増えてしまうかもしれません。これはかなり危険です。</p>
           <p class="hint">注目例：危機感、断定、未来への不安</p>
         </article>
         <article class="card sample">
-          <h3>文章B：便利さを強調する語り</h3>
           <p><b>「AIを使っていない人、正直かなり損してます。」</b> 生成AIは、もう特別なものではなくて、新しい文房具みたいなものです。わからない言葉を聞く、文章の構成を相談する、考えを整理する。うまく使えば、むしろ自分で考える時間を増やせます。</p>
           <p>大事なのは、AIの答えを丸のみしないこと。確認しながら使えば、学びの効率はかなり上がります。禁止するより、使い方を覚える。これ一択だと思います。</p>
           <p class="hint">注目例：前向きな比喩、効率、安心感</p>
         </article>
         <article class="card sample">
-          <h3>文章C：対立を作る語り</h3>
           <p><b>「新しい道具をすぐ否定する人、だいたい時代に置いていかれます。」</b> インターネットのときも、スマホのときも、最初は「危ない」「考えなくなる」と言われました。でも結局、使いこなした人が新しい学び方を手に入れてきました。</p>
           <p>AIも同じです。使う人と使わない人の差は、これからどんどん広がります。問題はAIではなく、変化を理解しようとしない態度です。怖がる側に合わせて止まるのか、先に進むのか。ここで差がつきます。</p>
           <p class="hint">注目例：敵味方、優劣、単純な二分法</p>
@@ -579,6 +577,30 @@
       </div>
     </section>
 
+    <section id="individual-share">
+      <p class="sub">展開1共有 5分</p>
+      <h2>個人回答の傾向を見る</h2>
+      <p class="lead">個人回答の集計を見て、なぜその文章が選ばれやすいのか、また選ばれにくい文章にはどのような特徴があるのかを考えます。</p>
+      <div class="grid two">
+        <div class="board">
+          <h3>個人回答の集計</h3>
+          <div class="bars">
+            <div class="bar"><b>文章A</b><div class="track"><div class="fill" id="barA"></div></div><span id="countA">0人</span></div>
+            <div class="bar"><b>文章B</b><div class="track"><div class="fill" id="barB"></div></div><span id="countB">0人</span></div>
+            <div class="bar"><b>文章C</b><div class="track"><div class="fill" id="barC"></div></div><span id="countC">0人</span></div>
+          </div>
+          <h3>選んだ文章別の特徴</h3>
+          <div id="tagSummary"></div>
+        </div>
+        <div class="board">
+          <h3>個人の代表例</h3>
+          <div class="summary-list" id="individualList">
+            <p class="empty">まだ保存された回答はありません。</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <section id="group">
       <p class="sub">展開2 15分</p>
       <h2>班で分析をまとめる</h2>
@@ -600,23 +622,21 @@
             </select>
           </div>
           <div>
-            <label for="groupChoice">班で最も納得しやすいと考えた文章</label>
+            <label for="groupChoice">分析したいポイント</label>
             <select id="groupChoice">
-              <option value="A">文章A：不安を強める語り</option>
-              <option value="B">文章B：便利さを強調する語り</option>
-              <option value="C">文章C：対立を作る語り</option>
+              <option value="Aが多い理由">Aが多い理由</option>
+              <option value="Bが多い理由">Bが多い理由</option>
+              <option value="Cが多い理由">Cが多い理由</option>
+              <option value="Aが少ない理由">Aが少ない理由</option>
+              <option value="Bが少ない理由">Bが少ない理由</option>
+              <option value="Cが少ない理由">Cが少ない理由</option>
+              <option value="特徴の集計で気になった点">特徴の集計で気になった点</option>
             </select>
           </div>
         </div>
 
-        <label for="groupReason">なぜ納得しやすいのか</label>
-        <textarea id="groupReason" placeholder="語り方、言葉の選び方、構成、前提に注目して書く。"></textarea>
-
-        <label for="groupSimplify">どのように単純化されているか</label>
-        <textarea id="groupSimplify" placeholder="複雑な問題が、どのようにわかりやすい物語に変えられているか。"></textarea>
-
-        <label for="groupConcept">本文の概念との関連</label>
-        <textarea id="groupConcept" placeholder="ナラティブ、脳の省エネ、係数aなどと結び付けて考える。"></textarea>
+        <label for="groupReason">集計を見て、班で分析したこと</label>
+        <textarea id="groupReason" placeholder="例：Aが多いのは、不安をあおる表現が強く、危険を避けたい気持ちに訴えるからではないか。"></textarea>
 
         <div class="actions">
           <button class="primary" id="saveGroup">班のまとめを投稿</button>
@@ -626,26 +646,11 @@
 
     <section id="share">
       <p class="sub">展開3 10分</p>
-      <h2>全体で共有する</h2>
-      <div class="grid two">
-        <div class="board">
-          <h3>個人回答の集計</h3>
-          <div class="bars">
-            <div class="bar"><b>文章A</b><div class="track"><div class="fill" id="barA"></div></div><span id="countA">0人</span></div>
-            <div class="bar"><b>文章B</b><div class="track"><div class="fill" id="barB"></div></div><span id="countB">0人</span></div>
-            <div class="bar"><b>文章C</b><div class="track"><div class="fill" id="barC"></div></div><span id="countC">0人</span></div>
-          </div>
-          <h3>個人の気づき</h3>
-          <div id="tagSummary"></div>
-          <div class="summary-list" id="individualList">
-            <p class="empty">まだ保存された回答はありません。</p>
-          </div>
-        </div>
-        <div class="board">
-          <h3>班のまとめ</h3>
-          <div class="summary-list" id="groupList">
-            <p class="empty">まだ投稿された班のまとめはありません。</p>
-          </div>
+      <h2>班の分析を共有する</h2>
+      <div class="board">
+        <h3>班のまとめ</h3>
+        <div class="summary-list" id="groupList">
+          <p class="empty">まだ投稿された班のまとめはありません。</p>
         </div>
       </div>
     </section>
@@ -665,6 +670,37 @@
         <div class="card">
           <h3>係数a</h3>
           <p>同じ情報でも、受け取る人の経験や前提によって見え方が変わる。</p>
+        </div>
+      </div>
+      <div class="board" style="margin-top: 18px;">
+        <h3>本文の概念と活動を結び付ける</h3>
+        <div class="grid two">
+          <div>
+            <label for="conceptNumber">番号</label>
+            <input id="conceptNumber" placeholder="例：12">
+          </div>
+          <div>
+            <label for="conceptName">名前</label>
+            <input id="conceptName" placeholder="例：山田">
+          </div>
+        </div>
+        <label for="conceptChoice">結び付けたい本文の概念</label>
+        <select id="conceptChoice">
+          <option value="ナラティブ">ナラティブ</option>
+          <option value="脳の省エネ">脳の省エネ</option>
+          <option value="係数a">係数a</option>
+        </select>
+        <label for="conceptText">今日の活動とどう関係しているか</label>
+        <textarea id="conceptText" placeholder="例：Aが選ばれやすかったのは、不安をあおる語りが一つのわかりやすい物語になっていたからだと思う。"></textarea>
+        <div class="actions">
+          <button class="primary" id="saveConcept">本文との関連を保存</button>
+        </div>
+      </div>
+      <div class="board" style="margin-top: 18px;">
+        <h3>本文接続の回答共有</h3>
+        <div id="conceptSummary"></div>
+        <div class="summary-list" id="conceptList">
+          <p class="empty">まだ保存された回答はありません。</p>
         </div>
       </div>
     </section>
@@ -723,9 +759,9 @@
 
   <script>
     const GAS_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbyLFj5GMqWeiYDP4aYABbbvJP1nFqlszlSxCVmL8ytco6bPABATBSjyApA4Eo8o6YGSHg/exec";
-    const LESSON_ID = "2026-06-20-1H-live";
+    const LESSON_ID = "2026-06-20-1H-honban";
     const PORTFOLIO_KEY = `narrativePortfolio.${LESSON_ID}`;
-    const state = { individuals: [], groups: [], reflections: [] };
+    const state = { individuals: [], groups: [], concepts: [], reflections: [] };
 
     const samples = ["A", "B", "C"];
     for (const key of samples) {
@@ -755,7 +791,7 @@
       await saveEntry(entry, () => {
         rememberOwnEntry(entry);
         clearIndividualForm();
-        location.hash = "#group";
+        location.hash = "#individual-share";
       });
     });
 
@@ -765,14 +801,29 @@
         groupName: valueOf("#groupName") || "班名なし",
         choice: valueOf("#groupChoice"),
         reason: valueOf("#groupReason"),
-        simplify: valueOf("#groupSimplify"),
-        concept: valueOf("#groupConcept"),
         createdAtText: new Date().toLocaleString("ja-JP")
       };
       await saveEntry(entry, () => {
         rememberOwnEntry(entry);
         clearGroupForm();
         location.hash = "#share";
+      });
+    });
+
+    document.querySelector("#saveConcept").addEventListener("click", async () => {
+      const entry = {
+        type: "concept",
+        number: valueOf("#conceptNumber"),
+        name: valueOf("#conceptName"),
+        concept: valueOf("#conceptChoice"),
+        text: valueOf("#conceptText"),
+        createdAtText: new Date().toLocaleString("ja-JP")
+      };
+      await saveEntry(entry, () => {
+        rememberOwnEntry(entry);
+        document.querySelector("#conceptNumber").value = "";
+        document.querySelector("#conceptName").value = "";
+        document.querySelector("#conceptText").value = "";
       });
     });
 
@@ -811,6 +862,7 @@
         } else {
           if (entry.type === "individual") state.individuals.push(entry);
           if (entry.type === "group") state.groups.push(entry);
+          if (entry.type === "concept") state.concepts.push(entry);
           if (entry.type === "reflection") state.reflections.push(entry);
           render();
         }
@@ -832,6 +884,7 @@
         const data = await response.json();
         state.individuals = data.individuals || [];
         state.groups = data.groups || [];
+        state.concepts = data.concepts || [];
         state.reflections = data.reflections || [];
         render();
       } catch (error) {
@@ -845,6 +898,7 @@
       renderTagSummary();
       renderIndividuals();
       renderGroups();
+      renderConceptResponses();
       renderKeywordCloud();
       renderReflections();
     }
@@ -867,14 +921,14 @@
       }
       const examples = state.individuals
         .filter((item) => item.reason)
-        .slice(-5)
+        .slice(-10)
         .reverse();
       if (!examples.length) {
         root.innerHTML = `<p class="empty">記述された代表例はまだありません。</p>`;
         return;
       }
       root.innerHTML = `
-        <p class="hint">代表例5件。氏名や番号は表示しません。</p>
+        <p class="hint">代表例10件。氏名や番号は表示しません。</p>
         ${examples.map((item) => `
         <article class="response">
           <small>${escapeHtml(formatDateTime(item.createdAtText))} / 文章${escapeHtml(item.choice)}</small>
@@ -934,15 +988,47 @@
     function renderGroups() {
       const root = document.querySelector("#groupList");
       if (!state.groups.length) {
-        root.innerHTML = `<p class="empty">まだ投稿された班のまとめはありません。</p>`;
+        root.innerHTML = `<p class="empty">まだ投稿された班の分析はありません。</p>`;
         return;
       }
       root.innerHTML = state.groups.map((item) => `
         <article class="response">
-          <small>${escapeHtml(formatDateTime(item.createdAtText))} / ${escapeHtml(item.groupName)} / 文章${escapeHtml(item.choice)}</small>
-          <p><b>納得しやすい理由：</b>${escapeHtml(item.reason || "未入力")}</p>
-          <p><b>単純化：</b>${escapeHtml(item.simplify || "未入力")}</p>
-          <p><b>本文との関連：</b>${escapeHtml(item.concept || "未入力")}</p>
+          <small>${escapeHtml(formatDateTime(item.createdAtText))} / ${escapeHtml(item.groupName)} / 分析ポイント：${escapeHtml(item.choice)}</small>
+          <p><b>分析：</b>${escapeHtml(item.reason || "未入力")}</p>
+        </article>
+      `).join("");
+    }
+    function renderConceptResponses() {
+      const summaryRoot = document.querySelector("#conceptSummary");
+      const listRoot = document.querySelector("#conceptList");
+      if (!summaryRoot || !listRoot) return;
+      if (!state.concepts.length) {
+        summaryRoot.innerHTML = `<p class="empty">概念別の集計はまだありません。</p>`;
+        listRoot.innerHTML = `<p class="empty">まだ保存された回答はありません。</p>`;
+        return;
+      }
+      const counts = {};
+      for (const item of state.concepts) {
+        counts[item.concept] = (counts[item.concept] || 0) + 1;
+      }
+      const entries = Object.entries(counts).sort((a, b) => b[1] - a[1]);
+      const max = Math.max(...entries.map((entry) => entry[1]), 1);
+      summaryRoot.innerHTML = `
+        <div class="bars">
+          ${entries.map(([concept, count]) => `
+            <div class="bar">
+              <b>${escapeHtml(concept)}</b>
+              <div class="track"><div class="fill" style="width: ${(count / max) * 100}%"></div></div>
+              <span>${count}人</span>
+            </div>
+          `).join("")}
+        </div>
+      `;
+      const examples = state.concepts.filter((item) => item.text).slice(-10).reverse();
+      listRoot.innerHTML = examples.map((item) => `
+        <article class="response">
+          <small>${escapeHtml(formatDateTime(item.createdAtText))} / ${escapeHtml(item.concept)}</small>
+          <p>${escapeHtml(item.text || "未入力")}</p>
         </article>
       `).join("");
     }
@@ -966,8 +1052,9 @@
       const own = loadOwnPortfolio();
       const individual = [...own.individuals].reverse()[0];
       const group = [...own.groups].reverse()[0];
+      const concept = [...own.concepts].reverse()[0];
       const reflection = [...own.reflections].reverse()[0];
-      if (!individual && !group && !reflection) {
+      if (!individual && !group && !concept && !reflection) {
         root.innerHTML = `<p class="empty">まだこの端末で保存された学習記録がありません。</p>`;
         return;
       }
@@ -982,19 +1069,24 @@
           <h4>自分の個人分析</h4>
           ${individual ? `
             <p><b>選んだ文章：</b>文章${escapeHtml(individual.choice)}</p>
-            <p><b>選んだ特徴：</b>${escapeHtml((individual.tags || []).join("、") || "未選択")}</p>
+            <p><b>気になった特徴：</b>${escapeHtml((individual.tags || []).join("、") || "未選択")}</p>
             <p><b>理由：</b>${escapeHtml(individual.reason || "未入力")}</p>
           ` : `<p class="empty">個人分析はまだ保存されていません。</p>`}
         </div>
         <div class="portfolio-section">
-          <h4>班でまとめたこと</h4>
+          <h4>班で分析したこと</h4>
           ${group ? `
             <p><b>班：</b>${escapeHtml(group.groupName || "")}</p>
-            <p><b>班で選んだ文章：</b>文章${escapeHtml(group.choice || "")}</p>
-            <p><b>納得しやすい理由：</b>${escapeHtml(group.reason || "未入力")}</p>
-            <p><b>単純化：</b>${escapeHtml(group.simplify || "未入力")}</p>
-            <p><b>本文との関連：</b>${escapeHtml(group.concept || "未入力")}</p>
-          ` : `<p class="empty">班のまとめはまだ保存されていません。</p>`}
+            <p><b>分析ポイント：</b>${escapeHtml(group.choice || "")}</p>
+            <p><b>班で分析したこと：</b>${escapeHtml(group.reason || "未入力")}</p>
+          ` : `<p class="empty">班の分析はまだ保存されていません。</p>`}
+        </div>
+        <div class="portfolio-section">
+          <h4>本文との関連</h4>
+          ${concept ? `
+            <p><b>選んだ概念：</b>${escapeHtml(concept.concept || "")}</p>
+            <p>${escapeHtml(concept.text || "未入力")}</p>
+          ` : `<p class="empty">本文との関連はまだ保存されていません。</p>`}
         </div>
         <div class="portfolio-section">
           <h4>自分の振り返り</h4>
@@ -1007,7 +1099,6 @@
         </div>
       `;
     }
-
     function renderKeywordCloud() {
       const root = document.querySelector("#keywordCloud");
       const text = state.reflections.map((item) => item.text).join(" ");
@@ -1070,17 +1161,18 @@
     }
 
     function loadOwnPortfolio() {
+      const empty = { individuals: [], groups: [], concepts: [], reflections: [] };
       try {
-        return JSON.parse(localStorage.getItem(PORTFOLIO_KEY)) || { individuals: [], groups: [], reflections: [] };
+        return { ...empty, ...(JSON.parse(localStorage.getItem(PORTFOLIO_KEY)) || {}) };
       } catch {
-        return { individuals: [], groups: [], reflections: [] };
+        return empty;
       }
     }
-
     function rememberOwnEntry(entry) {
       const own = loadOwnPortfolio();
       if (entry.type === "individual") own.individuals.push(entry);
       if (entry.type === "group") own.groups.push(entry);
+      if (entry.type === "concept") own.concepts.push(entry);
       if (entry.type === "reflection") own.reflections.push(entry);
       localStorage.setItem(PORTFOLIO_KEY, JSON.stringify(own));
     }
@@ -1096,10 +1188,7 @@
 
     function clearGroupForm() {
       document.querySelector("#groupReason").value = "";
-      document.querySelector("#groupSimplify").value = "";
-      document.querySelector("#groupConcept").value = "";
     }
-
     function csvCell(value) {
       const text = String(value ?? "");
       return `"${text.replace(/"/g, '""')}"`;
@@ -1118,3 +1207,5 @@
   </script>
 </body>
 </html>
+
+
