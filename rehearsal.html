@@ -1,0 +1,1120 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SNSで暴れるナラティブ 授業ボード（リハーサル版）</title>
+  <style>
+    :root {
+      --ink: #202124;
+      --muted: #5f6368;
+      --line: #d9dee3;
+      --paper: #ffffff;
+      --soft: #f6f8fa;
+      --accent: #256f7b;
+      --accent-dark: #174e57;
+      --warn: #b45309;
+      --good: #2f6f4e;
+      --tag1: #fff2cc;
+      --tag2: #d9ead3;
+      --tag3: #d9eaf7;
+      --tag4: #f4cccc;
+      --shadow: 0 10px 24px rgba(32, 33, 36, .08);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      color: var(--ink);
+      background: var(--soft);
+      font-family: "Yu Gothic", "Meiryo", system-ui, sans-serif;
+      line-height: 1.7;
+    }
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      border-bottom: 1px solid var(--line);
+      background: rgba(255, 255, 255, .94);
+      backdrop-filter: blur(10px);
+    }
+
+    .topbar {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 16px;
+      align-items: center;
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 12px 20px;
+    }
+
+    h1,
+    h2,
+    h3,
+    p {
+      margin-top: 0;
+    }
+
+    h1 {
+      margin-bottom: 2px;
+      font-size: 20px;
+      line-height: 1.35;
+    }
+
+    h2 {
+      margin-bottom: 14px;
+      font-size: 28px;
+      line-height: 1.35;
+    }
+
+    h3 {
+      margin-bottom: 8px;
+      font-size: 18px;
+    }
+
+    .sub {
+      margin: 0;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      justify-content: flex-end;
+    }
+
+    nav a,
+    button {
+      border: 1px solid var(--line);
+      border-radius: 7px;
+      background: var(--paper);
+      color: var(--ink);
+      cursor: pointer;
+      font: inherit;
+      text-decoration: none;
+    }
+
+    nav a {
+      padding: 6px 10px;
+      font-size: 13px;
+      line-height: 1.2;
+    }
+
+    nav a:hover,
+    button:hover {
+      border-color: var(--accent);
+    }
+
+    main {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 24px 20px 72px;
+    }
+
+    section {
+      min-height: calc(100vh - 70px);
+      padding: 40px 0;
+      border-bottom: 1px solid var(--line);
+    }
+
+    #concept {
+      min-height: auto;
+    }
+
+    .lead {
+      max-width: 780px;
+      color: #394047;
+      font-size: 18px;
+    }
+
+    .board,
+    .card {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--paper);
+      box-shadow: var(--shadow);
+    }
+
+    .board {
+      padding: 22px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .two {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    }
+
+    .card {
+      padding: 18px;
+    }
+
+    .sample {
+      display: flex;
+      flex-direction: column;
+      min-height: 100%;
+      border-top: 5px solid var(--accent);
+    }
+
+    .sample b {
+      color: var(--accent-dark);
+    }
+
+    .sample p {
+      margin-bottom: 12px;
+    }
+
+    .metric {
+      display: grid;
+      grid-template-columns: 150px 1fr 44px;
+      gap: 12px;
+      align-items: center;
+      margin: 12px 0;
+    }
+
+    input,
+    select,
+    textarea {
+      width: 100%;
+      border: 1px solid #c8ced4;
+      border-radius: 7px;
+      background: #fff;
+      color: var(--ink);
+      font: inherit;
+    }
+
+    input,
+    select {
+      min-height: 42px;
+      padding: 8px 10px;
+    }
+
+    textarea {
+      min-height: 110px;
+      padding: 10px 12px;
+      resize: vertical;
+    }
+
+    input[type="range"] {
+      min-height: auto;
+      padding: 0;
+      accent-color: var(--accent);
+    }
+
+    label {
+      display: block;
+      margin: 14px 0 6px;
+      font-weight: 700;
+    }
+
+    .hint {
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .tag-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+      margin: 12px 0 16px;
+    }
+
+    .tag {
+      display: flex;
+      min-height: 42px;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 10px;
+      border: 1px solid var(--line);
+      border-radius: 7px;
+      background: var(--soft);
+      font-weight: 700;
+    }
+
+    .tag input {
+      width: 18px;
+      min-height: 18px;
+      margin: 0;
+    }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 18px;
+    }
+
+    .primary {
+      border-color: var(--accent);
+      background: var(--accent);
+      color: #fff;
+    }
+
+    .danger {
+      border-color: #c2410c;
+      color: #9a3412;
+    }
+
+    button {
+      min-height: 42px;
+      padding: 8px 14px;
+      font-weight: 700;
+    }
+
+    .summary-list {
+      display: grid;
+      gap: 12px;
+      margin-top: 16px;
+    }
+
+    .response {
+      padding: 14px;
+      border: 1px solid var(--line);
+      border-left: 6px solid var(--accent);
+      border-radius: 8px;
+      background: #fff;
+    }
+
+    .response small {
+      color: var(--muted);
+    }
+
+    .bars {
+      display: grid;
+      gap: 10px;
+      margin: 10px 0 20px;
+    }
+
+    .bar {
+      display: grid;
+      grid-template-columns: 80px 1fr 48px;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .track {
+      height: 18px;
+      overflow: hidden;
+      border-radius: 999px;
+      background: #e8edf1;
+    }
+
+    .fill {
+      width: 0%;
+      height: 100%;
+      background: var(--accent);
+      transition: width .2s ease;
+    }
+
+    .quote {
+      border-left: 6px solid var(--warn);
+      background: #fff8ed;
+      box-shadow: none;
+    }
+
+    .concepts {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .concepts .card {
+      box-shadow: none;
+    }
+
+    .word-cloud {
+      display: flex;
+      min-height: 150px;
+      align-items: center;
+      align-content: center;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 8px 14px;
+      padding: 18px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fbfcfd;
+    }
+
+    .word-cloud .word {
+      color: var(--accent-dark);
+      font-weight: 700;
+      line-height: 1.2;
+    }
+
+    .pill {
+      display: inline-flex;
+      margin: 4px 6px 4px 0;
+      padding: 4px 8px;
+      border-radius: 999px;
+      background: #e9f3f5;
+      color: var(--accent-dark);
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .empty {
+      color: var(--muted);
+      font-style: italic;
+    }
+
+    .portfolio {
+      display: none;
+      margin-top: 18px;
+    }
+
+    .portfolio.visible {
+      display: block;
+    }
+
+    .portfolio-section {
+      margin-top: 16px;
+      padding-top: 14px;
+      border-top: 1px solid var(--line);
+    }
+
+    .portfolio-section h4 {
+      margin: 0 0 8px;
+      font-size: 16px;
+    }
+
+    @media print {
+      header,
+      main > section:not(#reflection),
+      #reflection > .sub,
+      #reflection > h2,
+      #reflection > .quote,
+      #reflection > .board:not(#portfolioBoard) {
+        display: none !important;
+      }
+
+      body {
+        background: #fff;
+      }
+
+      main {
+        padding: 0;
+      }
+
+      #reflection,
+      #portfolioBoard {
+        display: block !important;
+        min-height: auto;
+        padding: 0;
+        border: 0;
+        box-shadow: none;
+      }
+    }
+
+    @media (max-width: 900px) {
+      .topbar,
+      .grid,
+      .two,
+      .concepts {
+        grid-template-columns: 1fr;
+      }
+
+      nav {
+        justify-content: flex-start;
+      }
+
+      section {
+        min-height: auto;
+        padding: 32px 0;
+      }
+
+      .tag-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .metric {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="topbar">
+      <div>
+        <h1>SNSで暴れるナラティブ 授業ボード（リハーサル版）</h1>
+        <p class="sub">導入から振り返りまで、上から順に進める50分授業用プロトタイプ</p>
+      </div>
+      <nav aria-label="授業の進行">
+        <a href="#intro">導入</a>
+        <a href="#compare">個人比較</a>
+        <a href="#group">班まとめ</a>
+        <a href="#share">全体共有</a>
+        <a href="#concept">本文接続</a>
+        <a href="#reflection">振り返り</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section id="intro">
+      <div class="board">
+        <p class="sub">導入 5分</p>
+        <h2>“わかりやすい説明”は、本当に正しいのか</h2>
+        <p class="lead">同じ出来事でも、語り方や立場によって受け取り方は変わります。今日は「どれが正しいか」を急いで決めずに、「なぜ納得しそうになるのか」を表現や構成から考えます。</p>
+        <div class="grid concepts">
+          <div class="card">
+            <h3>見る観点</h3>
+            <span class="pill">不安をあおる</span>
+            <span class="pill">敵と味方に分ける</span>
+            <span class="pill">単純化する</span>
+            <span class="pill">強く断定する</span>
+          </div>
+          <div class="card">
+            <h3>本文と結び付ける語</h3>
+            <span class="pill">ナラティブ</span>
+            <span class="pill">脳の省エネ</span>
+            <span class="pill">係数a</span>
+            <span class="pill">わかりやすさ</span>
+          </div>
+          <div class="card">
+            <h3>今日のゴール</h3>
+            <p>情報を受け取る自分の反応を観察し、刺激的な語りと距離を取る言葉を持つ。</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="compare">
+      <p class="sub">展開1 10分</p>
+      <h2>個人で文章を比較する</h2>
+      <p class="lead">次の3つは、同じ架空の出来事について異なる語り口で書いた文章です。最も納得しそうになったものを選び、その理由を具体的な表現に注目して書きます。</p>
+      <div class="grid">
+        <article class="card sample">
+          <h3>文章A：不安を強める語り</h3>
+          <p><b>「AIを何も考えずに使っている人、正直かなり危ないです。」</b> 生成AIを使えば、一瞬で答えが出ます。でも、それって本当に「考えた」ことになるのでしょうか。調べる、迷う、言葉を選ぶ。そういう大事な時間が、気づかないうちに全部ショートカットされています。</p>
+          <p>便利だからといって何でも任せていたら、自分で判断する力は確実に弱くなります。今止めないと、「AIが言ってるから正しい」で終わる人が増えてしまうかもしれません。これはかなり危険です。</p>
+          <p class="hint">注目例：危機感、断定、未来への不安</p>
+        </article>
+        <article class="card sample">
+          <h3>文章B：便利さを強調する語り</h3>
+          <p><b>「AIを使っていない人、正直かなり損してます。」</b> 生成AIは、もう特別なものではなくて、新しい文房具みたいなものです。わからない言葉を聞く、文章の構成を相談する、考えを整理する。うまく使えば、むしろ自分で考える時間を増やせます。</p>
+          <p>大事なのは、AIの答えを丸のみしないこと。確認しながら使えば、学びの効率はかなり上がります。禁止するより、使い方を覚える。これ一択だと思います。</p>
+          <p class="hint">注目例：前向きな比喩、効率、安心感</p>
+        </article>
+        <article class="card sample">
+          <h3>文章C：対立を作る語り</h3>
+          <p><b>「新しい道具をすぐ否定する人、だいたい時代に置いていかれます。」</b> インターネットのときも、スマホのときも、最初は「危ない」「考えなくなる」と言われました。でも結局、使いこなした人が新しい学び方を手に入れてきました。</p>
+          <p>AIも同じです。使う人と使わない人の差は、これからどんどん広がります。問題はAIではなく、変化を理解しようとしない態度です。怖がる側に合わせて止まるのか、先に進むのか。ここで差がつきます。</p>
+          <p class="hint">注目例：敵味方、優劣、単純な二分法</p>
+        </article>
+      </div>
+
+      <div class="board" style="margin-top: 18px;">
+        <div class="grid two">
+          <div>
+            <label for="studentNumber">番号</label>
+            <input id="studentNumber" placeholder="例：12">
+          </div>
+          <div>
+            <label for="studentName">名前</label>
+            <input id="studentName" placeholder="例：山田">
+          </div>
+        </div>
+        <div class="grid two">
+          <div>
+            <label for="choice">納得しそうになった文章</label>
+            <select id="choice">
+              <option value="A">文章A：不安を強める語り</option>
+              <option value="B">文章B：便利さを強調する語り</option>
+              <option value="C">文章C：対立を作る語り</option>
+            </select>
+          </div>
+        </div>
+
+        <label>納得しやすさ</label>
+        <div class="metric">
+          <span>文章A</span>
+          <input id="scoreA" type="range" min="1" max="5" value="3">
+          <output id="outA">3</output>
+        </div>
+        <div class="metric">
+          <span>文章B</span>
+          <input id="scoreB" type="range" min="1" max="5" value="3">
+          <output id="outB">3</output>
+        </div>
+        <div class="metric">
+          <span>文章C</span>
+          <input id="scoreC" type="range" min="1" max="5" value="3">
+          <output id="outC">3</output>
+        </div>
+
+        <label>選んだ文章に見られる特徴</label>
+        <p class="hint">自分が選んだ文章について、当てはまる特徴を選んでください。</p>
+        <div class="tag-grid">
+          <label class="tag"><input type="checkbox" value="不安をあおる">不安をあおる</label>
+          <label class="tag"><input type="checkbox" value="敵と味方に分ける">敵と味方に分ける</label>
+          <label class="tag"><input type="checkbox" value="単純化している">単純化している</label>
+          <label class="tag"><input type="checkbox" value="強く断定している">強く断定している</label>
+          <label class="tag"><input type="checkbox" value="感情に訴える">感情に訴える</label>
+          <label class="tag"><input type="checkbox" value="根拠が弱い">根拠が弱い</label>
+        </div>
+
+        <label for="reason">どの表現が、どのような印象を与えているか</label>
+        <textarea id="reason" placeholder="例：「手遅れ」という言葉が、急いで判断しないと危ないような印象を与えている。"></textarea>
+
+        <div class="actions">
+          <button class="primary" id="saveIndividual">個人の考えを保存</button>
+        </div>
+      </div>
+    </section>
+
+    <section id="group">
+      <p class="sub">展開2 15分</p>
+      <h2>班で分析をまとめる</h2>
+      <div class="board">
+        <div class="grid two">
+          <div>
+            <label for="groupName">班名</label>
+            <select id="groupName">
+              <option value="1班">1班</option>
+              <option value="2班">2班</option>
+              <option value="3班">3班</option>
+              <option value="4班">4班</option>
+              <option value="5班">5班</option>
+              <option value="6班">6班</option>
+              <option value="7班">7班</option>
+              <option value="8班">8班</option>
+              <option value="9班">9班</option>
+              <option value="10班">10班</option>
+            </select>
+          </div>
+          <div>
+            <label for="groupChoice">班で最も納得しやすいと考えた文章</label>
+            <select id="groupChoice">
+              <option value="A">文章A：不安を強める語り</option>
+              <option value="B">文章B：便利さを強調する語り</option>
+              <option value="C">文章C：対立を作る語り</option>
+            </select>
+          </div>
+        </div>
+
+        <label for="groupReason">なぜ納得しやすいのか</label>
+        <textarea id="groupReason" placeholder="語り方、言葉の選び方、構成、前提に注目して書く。"></textarea>
+
+        <label for="groupSimplify">どのように単純化されているか</label>
+        <textarea id="groupSimplify" placeholder="複雑な問題が、どのようにわかりやすい物語に変えられているか。"></textarea>
+
+        <label for="groupConcept">本文の概念との関連</label>
+        <textarea id="groupConcept" placeholder="ナラティブ、脳の省エネ、係数aなどと結び付けて考える。"></textarea>
+
+        <div class="actions">
+          <button class="primary" id="saveGroup">班のまとめを投稿</button>
+        </div>
+      </div>
+    </section>
+
+    <section id="share">
+      <p class="sub">展開3 10分</p>
+      <h2>全体で共有する</h2>
+      <div class="grid two">
+        <div class="board">
+          <h3>個人回答の集計</h3>
+          <div class="bars">
+            <div class="bar"><b>文章A</b><div class="track"><div class="fill" id="barA"></div></div><span id="countA">0人</span></div>
+            <div class="bar"><b>文章B</b><div class="track"><div class="fill" id="barB"></div></div><span id="countB">0人</span></div>
+            <div class="bar"><b>文章C</b><div class="track"><div class="fill" id="barC"></div></div><span id="countC">0人</span></div>
+          </div>
+          <h3>個人の気づき</h3>
+          <div id="tagSummary"></div>
+          <div class="summary-list" id="individualList">
+            <p class="empty">まだ保存された回答はありません。</p>
+          </div>
+        </div>
+        <div class="board">
+          <h3>班のまとめ</h3>
+          <div class="summary-list" id="groupList">
+            <p class="empty">まだ投稿された班のまとめはありません。</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="concept">
+      <p class="sub">本文接続</p>
+      <h2>活動を本文の読みへ戻す</h2>
+      <div class="concepts">
+        <div class="card">
+          <h3>ナラティブ</h3>
+          <p>ばらばらの情報を、つながった物語として理解したくなる働きに注目する。</p>
+        </div>
+        <div class="card">
+          <h3>脳の省エネ</h3>
+          <p>複雑なことをすぐに整理できる説明ほど、考える負担が小さく感じられる。</p>
+        </div>
+        <div class="card">
+          <h3>係数a</h3>
+          <p>同じ情報でも、受け取る人の経験や前提によって見え方が変わる。</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="reflection">
+      <p class="sub">まとめ 10分</p>
+      <h2>情報とどう距離を取るか</h2>
+      <div class="card quote">
+        <p>ぼくは、じぶんが参考にする意見としては、「よりスキャンダラスでないほう」を選びます。「より脅かしてないほう」を選びます。「より正義を語らないほう」を選びます。「より失礼でないほう」を選びます。そして「よりユーモアのあるほう」を選びます。</p>
+        <p class="hint">引用：糸井重里（@itoi_shigesato）「X（旧Twitter）」2011年4月25日 午後0:44 投稿</p>
+      </div>
+      <div class="board" style="margin-top: 18px;">
+        <div class="grid two">
+          <div>
+            <label for="finalNumber">番号</label>
+            <input id="finalNumber" placeholder="例：12">
+          </div>
+          <div>
+            <label for="finalName">名前</label>
+            <input id="finalName" placeholder="例：山田">
+          </div>
+        </div>
+        <label for="reflectionText">今日の振り返り</label>
+        <textarea id="reflectionText" placeholder="わかりやすい語りに引き込まれそうになる自分を自覚し、情報とどのように距離を取るかを書く。"></textarea>
+        <div class="actions">
+          <button class="primary" id="saveReflection">振り返りを保存</button>
+          <button id="showPortfolio">ポートフォリオを表示</button>
+        </div>
+      </div>
+
+      <div class="board portfolio" id="portfolioBoard">
+        <h3>学習ポートフォリオ</h3>
+        <div id="portfolioContent">
+          <p class="empty">まだこの端末で保存された学習記録がありません。</p>
+        </div>
+        <div class="actions">
+          <button onclick="window.print()">印刷・PDF保存</button>
+        </div>
+      </div>
+
+      <div class="board" style="margin-top: 18px;">
+        <h3>クラスの振り返りキーワード</h3>
+        <div class="word-cloud" id="keywordCloud">
+          <p class="empty">まだ保存された振り返りはありません。</p>
+        </div>
+      </div>
+
+      <div class="board" style="margin-top: 18px;">
+        <h3>振り返り一覧</h3>
+        <div class="summary-list" id="reflectionList">
+          <p class="empty">まだ保存された振り返りはありません。</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const GAS_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbyLFj5GMqWeiYDP4aYABbbvJP1nFqlszlSxCVmL8ytco6bPABATBSjyApA4Eo8o6YGSHg/exec";
+    const LESSON_ID = "2026-06-20-1H-live";
+    const PORTFOLIO_KEY = `narrativePortfolio.${LESSON_ID}`;
+    const state = { individuals: [], groups: [], reflections: [] };
+
+    const samples = ["A", "B", "C"];
+    for (const key of samples) {
+      const range = document.querySelector(`#score${key}`);
+      const out = document.querySelector(`#out${key}`);
+      range.addEventListener("input", () => {
+        out.textContent = range.value;
+      });
+    }
+
+    document.querySelector("#saveIndividual").addEventListener("click", async () => {
+      const tags = [...document.querySelectorAll(".tag input:checked")].map((item) => item.value);
+      const entry = {
+        type: "individual",
+        number: valueOf("#studentNumber"),
+        name: valueOf("#studentName"),
+        choice: valueOf("#choice"),
+        scores: {
+          A: valueOf("#scoreA"),
+          B: valueOf("#scoreB"),
+          C: valueOf("#scoreC")
+        },
+        tags,
+        reason: valueOf("#reason"),
+        createdAtText: new Date().toLocaleString("ja-JP")
+      };
+      await saveEntry(entry, () => {
+        rememberOwnEntry(entry);
+        clearIndividualForm();
+        location.hash = "#group";
+      });
+    });
+
+    document.querySelector("#saveGroup").addEventListener("click", async () => {
+      const entry = {
+        type: "group",
+        groupName: valueOf("#groupName") || "班名なし",
+        choice: valueOf("#groupChoice"),
+        reason: valueOf("#groupReason"),
+        simplify: valueOf("#groupSimplify"),
+        concept: valueOf("#groupConcept"),
+        createdAtText: new Date().toLocaleString("ja-JP")
+      };
+      await saveEntry(entry, () => {
+        rememberOwnEntry(entry);
+        clearGroupForm();
+        location.hash = "#share";
+      });
+    });
+
+    document.querySelector("#saveReflection").addEventListener("click", async () => {
+      const entry = {
+        type: "reflection",
+        number: valueOf("#finalNumber"),
+        name: valueOf("#finalName"),
+        text: valueOf("#reflectionText"),
+        createdAtText: new Date().toLocaleString("ja-JP")
+      };
+      await saveEntry(entry, () => {
+        rememberOwnEntry(entry);
+        document.querySelector("#finalNumber").value = "";
+        document.querySelector("#finalName").value = "";
+        document.querySelector("#reflectionText").value = "";
+      });
+    });
+
+    document.querySelector("#showPortfolio").addEventListener("click", () => {
+      renderPortfolio();
+      document.querySelector("#portfolioBoard").classList.add("visible");
+      location.hash = "#portfolioBoard";
+    });
+
+    async function saveEntry(entry, afterSave) {
+      try {
+        if (GAS_WEB_APP_URL) {
+          await fetch(GAS_WEB_APP_URL, {
+            method: "POST",
+            mode: "no-cors",
+            headers: { "Content-Type": "text/plain;charset=utf-8" },
+            body: JSON.stringify({ action: "save", lessonId: LESSON_ID, entry })
+          });
+          await loadResponses();
+        } else {
+          if (entry.type === "individual") state.individuals.push(entry);
+          if (entry.type === "group") state.groups.push(entry);
+          if (entry.type === "reflection") state.reflections.push(entry);
+          render();
+        }
+        afterSave();
+      } catch (error) {
+        console.error("GASへの保存に失敗しました", error);
+        alert("保存に失敗しました。GASのWebアプリURLと公開設定を確認してください。");
+      }
+    }
+
+    async function loadResponses() {
+      if (!GAS_WEB_APP_URL) {
+        render();
+        return;
+      }
+      try {
+        const url = `${GAS_WEB_APP_URL}?action=list&lessonId=${encodeURIComponent(LESSON_ID)}&t=${Date.now()}`;
+        const response = await fetch(url);
+        const data = await response.json();
+        state.individuals = data.individuals || [];
+        state.groups = data.groups || [];
+        state.reflections = data.reflections || [];
+        render();
+      } catch (error) {
+        console.error("GASからの読み込みに失敗しました", error);
+        alert("回答の読み込みに失敗しました。GASのWebアプリURLと公開設定を確認してください。");
+      }
+    }
+
+    function render() {
+      renderBars();
+      renderTagSummary();
+      renderIndividuals();
+      renderGroups();
+      renderKeywordCloud();
+      renderReflections();
+    }
+
+    function renderBars() {
+      const counts = { A: 0, B: 0, C: 0 };
+      for (const item of state.individuals) counts[item.choice] += 1;
+      const max = Math.max(1, counts.A, counts.B, counts.C);
+      for (const key of samples) {
+        document.querySelector(`#bar${key}`).style.width = `${(counts[key] / max) * 100}%`;
+        document.querySelector(`#count${key}`).textContent = `${counts[key]}人`;
+      }
+    }
+
+    function renderIndividuals() {
+      const root = document.querySelector("#individualList");
+      if (!state.individuals.length) {
+        root.innerHTML = `<p class="empty">まだ保存された回答はありません。</p>`;
+        return;
+      }
+      const examples = state.individuals
+        .filter((item) => item.reason)
+        .slice(-5)
+        .reverse();
+      if (!examples.length) {
+        root.innerHTML = `<p class="empty">記述された代表例はまだありません。</p>`;
+        return;
+      }
+      root.innerHTML = `
+        <p class="hint">代表例5件。氏名や番号は表示しません。</p>
+        ${examples.map((item) => `
+        <article class="response">
+          <small>${escapeHtml(formatDateTime(item.createdAtText))} / 文章${escapeHtml(item.choice)}</small>
+          <p>${escapeHtml(item.reason || "理由未入力")}</p>
+          <div>${item.tags.map((tag) => `<span class="pill">${escapeHtml(tag)}</span>`).join("")}</div>
+        </article>
+      `).join("")}`;
+    }
+
+    function renderTagSummary() {
+      const root = document.querySelector("#tagSummary");
+      const summaries = samples.map((sample) => {
+        const counts = {};
+        const items = state.individuals.filter((item) => item.choice === sample);
+        for (const item of items) {
+          for (const tag of item.tags) {
+            counts[tag] = (counts[tag] || 0) + 1;
+          }
+        }
+        return {
+          sample,
+          total: items.length,
+          entries: Object.entries(counts).sort((a, b) => b[1] - a[1])
+        };
+      });
+      if (!state.individuals.length) {
+        root.innerHTML = `<p class="empty">特徴の集計はまだありません。</p>`;
+        return;
+      }
+      root.innerHTML = summaries.map(({ sample, total, entries }) => {
+        if (!entries.length) {
+          return `
+            <div class="response">
+              <h3>文章${sample}</h3>
+              <p class="empty">選択した人は${total}人です。特徴はまだ選ばれていません。</p>
+            </div>
+          `;
+        }
+        const max = Math.max(...entries.map((entry) => entry[1]), 1);
+        return `
+          <div class="response">
+            <h3>文章${sample} <span class="hint">${total}人</span></h3>
+            <div class="bars">
+              ${entries.map(([tag, count]) => `
+                <div class="bar">
+                  <b>${escapeHtml(tag)}</b>
+                  <div class="track"><div class="fill" style="width: ${(count / max) * 100}%"></div></div>
+                  <span>${count}人</span>
+                </div>
+              `).join("")}
+            </div>
+          </div>
+        `;
+      }).join("");
+    }
+
+    function renderGroups() {
+      const root = document.querySelector("#groupList");
+      if (!state.groups.length) {
+        root.innerHTML = `<p class="empty">まだ投稿された班のまとめはありません。</p>`;
+        return;
+      }
+      root.innerHTML = state.groups.map((item) => `
+        <article class="response">
+          <small>${escapeHtml(formatDateTime(item.createdAtText))} / ${escapeHtml(item.groupName)} / 文章${escapeHtml(item.choice)}</small>
+          <p><b>納得しやすい理由：</b>${escapeHtml(item.reason || "未入力")}</p>
+          <p><b>単純化：</b>${escapeHtml(item.simplify || "未入力")}</p>
+          <p><b>本文との関連：</b>${escapeHtml(item.concept || "未入力")}</p>
+        </article>
+      `).join("");
+    }
+
+    function renderReflections() {
+      const root = document.querySelector("#reflectionList");
+      if (!state.reflections.length) {
+        root.innerHTML = `<p class="empty">まだ保存された振り返りはありません。</p>`;
+        return;
+      }
+      root.innerHTML = state.reflections.map((item, index) => `
+        <article class="response">
+          <small>${escapeHtml(formatDateTime(item.createdAtText))} / 回答${index + 1}</small>
+          <p>${escapeHtml(item.text || "未入力")}</p>
+        </article>
+      `).join("");
+    }
+
+    function renderPortfolio() {
+      const root = document.querySelector("#portfolioContent");
+      const own = loadOwnPortfolio();
+      const individual = [...own.individuals].reverse()[0];
+      const group = [...own.groups].reverse()[0];
+      const reflection = [...own.reflections].reverse()[0];
+      if (!individual && !group && !reflection) {
+        root.innerHTML = `<p class="empty">まだこの端末で保存された学習記録がありません。</p>`;
+        return;
+      }
+      const counts = { A: 0, B: 0, C: 0 };
+      for (const item of state.individuals) counts[item.choice] += 1;
+      const classKeywords = countKeywords(state.reflections.map((item) => item.text).join(" "))
+        .slice(0, 10)
+        .map((item) => item.word)
+        .join("、") || "まだありません";
+      root.innerHTML = `
+        <div class="portfolio-section">
+          <h4>自分の個人分析</h4>
+          ${individual ? `
+            <p><b>選んだ文章：</b>文章${escapeHtml(individual.choice)}</p>
+            <p><b>選んだ特徴：</b>${escapeHtml((individual.tags || []).join("、") || "未選択")}</p>
+            <p><b>理由：</b>${escapeHtml(individual.reason || "未入力")}</p>
+          ` : `<p class="empty">個人分析はまだ保存されていません。</p>`}
+        </div>
+        <div class="portfolio-section">
+          <h4>班でまとめたこと</h4>
+          ${group ? `
+            <p><b>班：</b>${escapeHtml(group.groupName || "")}</p>
+            <p><b>班で選んだ文章：</b>文章${escapeHtml(group.choice || "")}</p>
+            <p><b>納得しやすい理由：</b>${escapeHtml(group.reason || "未入力")}</p>
+            <p><b>単純化：</b>${escapeHtml(group.simplify || "未入力")}</p>
+            <p><b>本文との関連：</b>${escapeHtml(group.concept || "未入力")}</p>
+          ` : `<p class="empty">班のまとめはまだ保存されていません。</p>`}
+        </div>
+        <div class="portfolio-section">
+          <h4>自分の振り返り</h4>
+          ${reflection ? `<p>${escapeHtml(reflection.text || "未入力")}</p>` : `<p class="empty">振り返りはまだ保存されていません。</p>`}
+        </div>
+        <div class="portfolio-section">
+          <h4>クラス全体の傾向</h4>
+          <p><b>文章A：</b>${counts.A}人　<b>文章B：</b>${counts.B}人　<b>文章C：</b>${counts.C}人</p>
+          <p><b>振り返りキーワード：</b>${escapeHtml(classKeywords)}</p>
+        </div>
+      `;
+    }
+
+    function renderKeywordCloud() {
+      const root = document.querySelector("#keywordCloud");
+      const text = state.reflections.map((item) => item.text).join(" ");
+      const keywords = countKeywords(text);
+      if (!keywords.length) {
+        root.innerHTML = state.reflections.length
+          ? `<p class="empty">集計対象のキーワードはまだありません。</p>`
+          : `<p class="empty">まだ保存された振り返りはありません。</p>`;
+        return;
+      }
+      const max = Math.max(...keywords.map((item) => item.count));
+      root.innerHTML = keywords.slice(0, 24).map((item) => {
+        const size = 16 + Math.round((item.count / max) * 24);
+        return `<span class="word" style="font-size: ${size}px">${escapeHtml(item.word)}</span>`;
+      }).join("");
+    }
+
+    function countKeywords(text) {
+      const keywords = [
+        "根拠", "不安", "距離", "正しい", "わかりやすい", "納得", "疑う", "確認",
+        "判断", "SNS", "AI", "物語", "ナラティブ", "正義", "刺激", "信じる",
+        "感情", "単純化", "断定", "冷静", "比較", "多面的", "批判的", "根拠が弱い",
+        "不安をあおる", "敵と味方", "情報", "表現", "構成", "前提", "省エネ"
+      ];
+      const counts = new Map();
+      for (const keyword of keywords) {
+        const escaped = keyword.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+        const matches = text.match(new RegExp(escaped, "g"));
+        if (matches) {
+          counts.set(keyword, matches.length);
+        }
+      }
+      return [...counts.entries()]
+        .map(([word, count]) => ({ word, count }))
+        .sort((a, b) => b.count - a.count || a.word.localeCompare(b.word, "ja"));
+    }
+
+    function valueOf(selector) {
+      return document.querySelector(selector).value.trim();
+    }
+
+    function formatStudent(item) {
+      const number = item.number ? `${item.number}番` : "";
+      const name = item.name || "";
+      return [number, name].filter(Boolean).join(" / ") || "匿名";
+    }
+
+    function formatDateTime(value) {
+      if (!value) return "";
+      const date = new Date(value);
+      if (!Number.isNaN(date.getTime()) && String(value).includes("T")) {
+        return date.toLocaleString("ja-JP", {
+          month: "2-digit",
+          day: "2-digit",
+          hour: "2-digit",
+          minute: "2-digit"
+        });
+      }
+      return value;
+    }
+
+    function loadOwnPortfolio() {
+      try {
+        return JSON.parse(localStorage.getItem(PORTFOLIO_KEY)) || { individuals: [], groups: [], reflections: [] };
+      } catch {
+        return { individuals: [], groups: [], reflections: [] };
+      }
+    }
+
+    function rememberOwnEntry(entry) {
+      const own = loadOwnPortfolio();
+      if (entry.type === "individual") own.individuals.push(entry);
+      if (entry.type === "group") own.groups.push(entry);
+      if (entry.type === "reflection") own.reflections.push(entry);
+      localStorage.setItem(PORTFOLIO_KEY, JSON.stringify(own));
+    }
+
+    function clearIndividualForm() {
+      document.querySelector("#studentNumber").value = "";
+      document.querySelector("#studentName").value = "";
+      document.querySelector("#reason").value = "";
+      document.querySelectorAll(".tag input").forEach((item) => {
+        item.checked = false;
+      });
+    }
+
+    function clearGroupForm() {
+      document.querySelector("#groupReason").value = "";
+      document.querySelector("#groupSimplify").value = "";
+      document.querySelector("#groupConcept").value = "";
+    }
+
+    function csvCell(value) {
+      const text = String(value ?? "");
+      return `"${text.replace(/"/g, '""')}"`;
+    }
+
+    function escapeHtml(value) {
+      return String(value ?? "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+    }
+
+    loadResponses();
+  </script>
+</body>
+</html>
