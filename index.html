@@ -533,9 +533,9 @@
           <div>
             <label for="choice">納得しそうになった文章</label>
             <select id="choice">
-              <option value="A">文章A：不安を強める語り</option>
-              <option value="B">文章B：便利さを強調する語り</option>
-              <option value="C">文章C：対立を作る語り</option>
+              <option value="A">文章A</option>
+              <option value="B">文章B</option>
+              <option value="C">文章C</option>
             </select>
           </div>
         </div>
@@ -790,7 +790,6 @@
       };
       await saveEntry(entry, () => {
         rememberOwnEntry(entry);
-        clearIndividualForm();
         location.hash = "#individual-share";
       });
     });
@@ -805,7 +804,6 @@
       };
       await saveEntry(entry, () => {
         rememberOwnEntry(entry);
-        clearGroupForm();
         location.hash = "#share";
       });
     });
@@ -821,9 +819,6 @@
       };
       await saveEntry(entry, () => {
         rememberOwnEntry(entry);
-        document.querySelector("#conceptNumber").value = "";
-        document.querySelector("#conceptName").value = "";
-        document.querySelector("#conceptText").value = "";
       });
     });
 
@@ -837,9 +832,6 @@
       };
       await saveEntry(entry, () => {
         rememberOwnEntry(entry);
-        document.querySelector("#finalNumber").value = "";
-        document.querySelector("#finalName").value = "";
-        document.querySelector("#reflectionText").value = "";
       });
     });
 
@@ -858,12 +850,10 @@
             headers: { "Content-Type": "text/plain;charset=utf-8" },
             body: JSON.stringify({ action: "save", lessonId: LESSON_ID, entry })
           });
-          await loadResponses();
+          addEntryToState(entry);
+          render();
         } else {
-          if (entry.type === "individual") state.individuals.push(entry);
-          if (entry.type === "group") state.groups.push(entry);
-          if (entry.type === "concept") state.concepts.push(entry);
-          if (entry.type === "reflection") state.reflections.push(entry);
+          addEntryToState(entry);
           render();
         }
         afterSave();
@@ -871,6 +861,13 @@
         console.error("GASへの保存に失敗しました", error);
         alert("保存に失敗しました。GASのWebアプリURLと公開設定を確認してください。");
       }
+    }
+
+    function addEntryToState(entry) {
+      if (entry.type === "individual") state.individuals.push(entry);
+      if (entry.type === "group") state.groups.push(entry);
+      if (entry.type === "concept") state.concepts.push(entry);
+      if (entry.type === "reflection") state.reflections.push(entry);
     }
 
     async function loadResponses() {
@@ -1177,18 +1174,6 @@
       localStorage.setItem(PORTFOLIO_KEY, JSON.stringify(own));
     }
 
-    function clearIndividualForm() {
-      document.querySelector("#studentNumber").value = "";
-      document.querySelector("#studentName").value = "";
-      document.querySelector("#reason").value = "";
-      document.querySelectorAll(".tag input").forEach((item) => {
-        item.checked = false;
-      });
-    }
-
-    function clearGroupForm() {
-      document.querySelector("#groupReason").value = "";
-    }
     function csvCell(value) {
       const text = String(value ?? "");
       return `"${text.replace(/"/g, '""')}"`;
