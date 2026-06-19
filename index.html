@@ -635,6 +635,17 @@
           </div>
         </div>
 
+        <div class="grid two">
+          <div>
+            <label for="groupMemberNumbers">班のメンバー番号</label>
+            <input id="groupMemberNumbers" placeholder="例：3, 12, 18, 27">
+          </div>
+          <div>
+            <label for="groupMemberNames">班のメンバー名</label>
+            <input id="groupMemberNames" placeholder="例：山田、佐藤、田中、鈴木">
+          </div>
+        </div>
+
         <label for="groupReason">集計を見て、班で分析したこと</label>
         <textarea id="groupReason" placeholder="例：Aが多いのは、不安をあおる表現が強く、危険を避けたい気持ちに訴えるからではないか。"></textarea>
 
@@ -797,6 +808,8 @@
     document.querySelector("#saveGroup").addEventListener("click", async () => {
       const entry = {
         type: "group",
+        number: valueOf("#groupMemberNumbers"),
+        name: valueOf("#groupMemberNames"),
         groupName: valueOf("#groupName") || "班名なし",
         choice: valueOf("#groupChoice"),
         reason: valueOf("#groupReason"),
