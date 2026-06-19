@@ -511,7 +511,8 @@
           <output id="outC">3</output>
         </div>
 
-        <label>気になった特徴</label>
+        <label>選んだ文章に見られる特徴</label>
+        <p class="hint">自分が選んだ文章について、当てはまる特徴を選んでください。</p>
         <div class="tag-grid">
           <label class="tag"><input type="checkbox" value="不安をあおる">不安をあおる</label>
           <label class="tag"><input type="checkbox" value="敵と味方に分ける">敵と味方に分ける</label>
@@ -816,31 +817,49 @@
 
     function renderTagSummary() {
       const root = document.querySelector("#tagSummary");
-      const counts = {};
-      for (const item of state.individuals) {
-        for (const tag of item.tags) {
-          counts[tag] = (counts[tag] || 0) + 1;
+      const summaries = samples.map((sample) => {
+        const counts = {};
+        const items = state.individuals.filter((item) => item.choice === sample);
+        for (const item of items) {
+          for (const tag of item.tags) {
+            counts[tag] = (counts[tag] || 0) + 1;
+          }
         }
-      }
-      const entries = Object.entries(counts).sort((a, b) => b[1] - a[1]);
-      if (!state.individuals.length || !entries.length) {
+        return {
+          sample,
+          total: items.length,
+          entries: Object.entries(counts).sort((a, b) => b[1] - a[1])
+        };
+      });
+      if (!state.individuals.length) {
         root.innerHTML = `<p class="empty">特徴の集計はまだありません。</p>`;
         return;
       }
-      root.innerHTML = `
-        <div class="bars">
-          ${entries.map(([tag, count]) => {
-            const max = Math.max(...entries.map((entry) => entry[1]), 1);
-            return `
-              <div class="bar">
-                <b>${escapeHtml(tag)}</b>
-                <div class="track"><div class="fill" style="width: ${(count / max) * 100}%"></div></div>
-                <span>${count}人</span>
-              </div>
-            `;
-          }).join("")}
-        </div>
-      `;
+      root.innerHTML = summaries.map(({ sample, total, entries }) => {
+        if (!entries.length) {
+          return `
+            <div class="response">
+              <h3>文章${sample}</h3>
+              <p class="empty">選択した人は${total}人です。特徴はまだ選ばれていません。</p>
+            </div>
+          `;
+        }
+        const max = Math.max(...entries.map((entry) => entry[1]), 1);
+        return `
+          <div class="response">
+            <h3>文章${sample} <span class="hint">${total}人</span></h3>
+            <div class="bars">
+              ${entries.map(([tag, count]) => `
+                <div class="bar">
+                  <b>${escapeHtml(tag)}</b>
+                  <div class="track"><div class="fill" style="width: ${(count / max) * 100}%"></div></div>
+                  <span>${count}人</span>
+                </div>
+              `).join("")}
+            </div>
+          </div>
+        `;
+      }).join("");
     }
 
     function renderGroups() {
