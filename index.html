@@ -855,6 +855,10 @@
     });
 
     async function saveEntry(entry, afterSave) {
+      addEntryToState(entry);
+      render();
+      afterSave();
+
       try {
         if (GAS_WEB_APP_URL) {
           await fetch(GAS_WEB_APP_URL, {
@@ -863,16 +867,10 @@
             headers: { "Content-Type": "text/plain;charset=utf-8" },
             body: JSON.stringify({ action: "save", lessonId: LESSON_ID, entry })
           });
-          addEntryToState(entry);
-          render();
-        } else {
-          addEntryToState(entry);
-          render();
         }
-        afterSave();
       } catch (error) {
         console.error("GASへの保存に失敗しました", error);
-        alert("保存に失敗しました。GASのWebアプリURLと公開設定を確認してください。");
+        alert("画面には反映しましたが、スプレッドシートへの保存に失敗した可能性があります。GASのWebアプリURLと公開設定を確認してください。");
       }
     }
 
